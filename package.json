@@ -1,0 +1,69 @@
+{
+  "name": "@tencent/qmfe-h5-lighthouse-launcher",
+  "version": "9.10.1",
+  "description": "QQ音乐H5性能报表自动化生成工具",
+  "scripts": {
+    "dev": "tsc -w & babel src  --extensions '.js' --out-dir es -w",
+    "install:chrome": "node node_modules/puppeteer-core/install.js",
+    "start": "pm2-runtime es/index.js",
+    "start:dev": "node es/index.js",
+    "debug": "node es/debug.js",
+    "pm2": "pm2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.code.oa.com/musicfe-c/qmfe-h5-lighthouse-launcher.git"
+  },
+  "bin": {
+    "qmlh": "es/debug.js"
+  },
+  "files": [
+    "es",
+    ".env.40",
+    "CHANGELOG.md"
+  ],
+  "author": "shiningding<shiningding@tencent.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "7.8.0",
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "chalk": "4",
+    "chrome-launcher": "0.13.4",
+    "commander": "^9.2.0",
+    "conf": "^10.1.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "whistle": "2.9.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.7.0",
+    "@babel/core": "7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-decorators": "^7.13.15",
+    "@babel/plugin-transform-modules-commonjs": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.15",
+    "@babel/preset-env": "7.7.1",
+    "@babel/preset-typescript": "^7.13.0",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@types/jest": "^27.4.0",
+    "@types/mocha": "^9.1.0",
+    "babel-eslint": "10.1.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.18.3",
+    "husky": "^3.0.9",
+    "jest": "^27.5.1",
+    "lint-staged": "^9.4.3",
+    "prettier": "^1.19.1",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.6.3"
+  }
+}
