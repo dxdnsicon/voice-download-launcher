@@ -29,6 +29,7 @@
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "chalk": "4",
+    "cheerio": "^1.0.0-rc.12",
     "chrome-launcher": "0.13.4",
     "commander": "^9.2.0",
     "conf": "^10.1.2",
@@ -37,7 +38,8 @@
     "dotenv": "^16.0.1",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
-    "whistle": "2.9.1"
+    "whistle": "2.9.1",
+    "puppeteer-core": "10.2.0"
   },
   "devDependencies": {
     "@babel/cli": "7.7.0",

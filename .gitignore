@@ -1,0 +1,14 @@
+node_modules
+yarn-error.log
+dev
+common
+dist
+logs
+**/package-lock.json
+**/.DS_Store
+__rsynctmpdist__
+es/
+playground/
+!playground/.gitkeep
+screen.png
+.env
