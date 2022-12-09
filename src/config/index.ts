@@ -5,7 +5,11 @@ const env = path.join(__dirname, '../../',(IS_MACOS ? '.env.shining' : '.env'));
 console.log('env', env)
 require('dotenv').config({ path: env })
 console.log('process.env', process.env.CHROME_PATH)
-export const CHROME_PATH = process.env.CHROME_PATH
+
+export const DIST_DIR = process.env.DIST_DIR;
+
+export const CHROME_PATH = process.env.CHROME_PATH;
+
 export const CHROME_FLAGS = [
   ...(IS_MACOS ? [] : ["--headless"]),
   "--no-sandbox",
