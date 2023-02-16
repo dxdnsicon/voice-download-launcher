@@ -1,7 +1,7 @@
 {
-  "name": "@tencent/qmfe-h5-lighthouse-launcher",
-  "version": "9.10.1",
-  "description": "QQ音乐H5性能报表自动化生成工具",
+  "name": "tdvoice-download-launcher",
+  "version": "1.0.0",
+  "description": "糖豆视频转音频",
   "scripts": {
     "dev": "tsc -w & babel src  --extensions '.js' --out-dir es -w",
     "install:chrome": "node node_modules/puppeteer-core/install.js",
@@ -12,33 +12,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://git.code.oa.com/musicfe-c/qmfe-h5-lighthouse-launcher.git"
+    "url": "https://github.com/dxdnsicon/voice-download-launcher"
   },
   "bin": {
-    "qmlh": "es/debug.js"
+    "tdload": "es/index.js"
   },
   "files": [
-    "es",
-    ".env.40",
-    "CHANGELOG.md"
+    "es"
   ],
   "author": "shiningding<shiningding@tencent.com>",
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "7.8.0",
-    "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
-    "chalk": "4",
-    "cheerio": "^1.0.0-rc.12",
-    "chrome-launcher": "0.13.4",
-    "commander": "^9.2.0",
-    "conf": "^10.1.2",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "dotenv": "^16.0.1",
-    "express": "^4.17.1",
-    "fs": "^0.0.1-security",
-    "whistle": "2.9.1",
+    "fluent-ffmpeg": "^2.1.2",
     "puppeteer-core": "10.2.0"
   },
   "devDependencies": {
