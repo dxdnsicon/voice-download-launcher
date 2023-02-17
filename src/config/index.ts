@@ -6,7 +6,8 @@ console.log('env', env)
 require('dotenv').config({ path: env })
 console.log('process.env', process.env.CHROME_PATH)
 
-export const DIST_DIR = process.env.DIST_DIR;
+export const DIST_DIR = path.resolve(process.cwd()) + '/';
+console.log('DIST_DIR', DIST_DIR)
 
 export const CHROME_PATH = process.env.CHROME_PATH;
 
