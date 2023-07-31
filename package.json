@@ -1,7 +1,7 @@
 {
   "name": "tdvoice-launcher",
-  "version": "1.0.2",
-  "description": "糖豆视频转音频工具（自用）",
+  "version": "1.0.0",
+  "description": "td视频下载转音频工具（自用）",
   "scripts": {
     "dev": "tsc -w & babel src  --extensions '.js' --out-dir es -w",
     "install:chrome": "node node_modules/puppeteer-core/install.js",
@@ -20,7 +20,7 @@
   "files": [
     "es"
   ],
-  "author": "shiningding<shiningding@tencent.com>",
+  "author": "dxdnsicon<dxdnsicon@github.com>",
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "7.8.0",

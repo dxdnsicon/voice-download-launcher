@@ -88,7 +88,7 @@ export default async function (pageUrl: string) {
     console.log('davideoUrlta', url, name)
     const filePath = await downLoadHandle(url, name);
     const mp3File = await mp4Tomp3(filePath, name);
-    console.log('filePath', mp3File)
+    console.log('转换完成', mp3File)
     process.exit(0)
   } catch(e) {
     console.error(e);

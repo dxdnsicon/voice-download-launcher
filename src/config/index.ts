@@ -1,4 +1,5 @@
 import { platform } from 'os';
+import * as fs from 'fs';
 import * as path from 'path'
 export const IS_MACOS = platform() === 'darwin';
 const env = path.join(__dirname, '../../',(IS_MACOS ? '.env.shining' : '.env'));
@@ -6,8 +7,19 @@ console.log('env', env)
 require('dotenv').config({ path: env })
 console.log('process.env', process.env.CHROME_PATH)
 
-export const DIST_DIR = path.resolve(process.cwd()) + '/';
+export const DIST_DIR = path.resolve(process.cwd()) + '/dist/';
 console.log('DIST_DIR', DIST_DIR)
+
+// 初始化目录(首次部署的时候可以自动创建配置中的目录，避免目录找不到)
+export const initPath = (path) => {
+  fs.exists(path, async (exists) => {
+    if (!exists) {
+      fs.mkdirSync(path);
+    }
+  });
+};
+
+initPath(DIST_DIR)
 
 export const CHROME_PATH = process.env.CHROME_PATH;
 
