@@ -1,6 +1,6 @@
 {
   "name": "tdvoice-launcher",
-  "version": "1.0.0",
+  "version": "2.2.0",
   "description": "td视频下载转音频工具（自用）",
   "scripts": {
     "dev": "tsc -w & babel src  --extensions '.js' --out-dir es -w",
@@ -18,7 +18,8 @@
     "tdload": "es/index.js"
   },
   "files": [
-    "es"
+    "es",
+    ".env"
   ],
   "author": "dxdnsicon<dxdnsicon@github.com>",
   "license": "ISC",

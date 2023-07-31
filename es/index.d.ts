@@ -1,2 +1,2 @@
-#!/usr/bin/node
+#!/usr/local/bin/node
 export {};

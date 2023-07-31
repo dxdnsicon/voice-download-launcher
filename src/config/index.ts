@@ -1,11 +1,30 @@
 import { platform } from 'os';
 import * as fs from 'fs';
 import * as path from 'path'
+import { exec } from 'child_process';
 export const IS_MACOS = platform() === 'darwin';
-const env = path.join(__dirname, '../../',(IS_MACOS ? '.env.shining' : '.env'));
-console.log('env', env)
+const env = path.resolve(__dirname, '../../.env');
 require('dotenv').config({ path: env })
-console.log('process.env', process.env.CHROME_PATH)
+
+export const CHROME_PATH = process.env.CHROME_PATH;
+
+export async function getChromeInstallPath(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const command = process.platform === 'win32' ? 'where chrome' : 'which google-chrome';
+    exec(command, (err, stdout) => {
+      if (!err) {
+        const chromePath = stdout.trim();
+        resolve(chromePath);
+      } else {
+        console.error('获取 Chrome 安装路径失败：使用默认安装Chrome路径:', CHROME_PATH);
+        resolve(CHROME_PATH);
+      }
+    });
+  })
+}
+
+
+console.log('env', env)
 
 export const DIST_DIR = path.resolve(process.cwd()) + '/dist/';
 console.log('DIST_DIR', DIST_DIR)
@@ -19,9 +38,7 @@ export const initPath = (path) => {
   });
 };
 
-initPath(DIST_DIR)
-
-export const CHROME_PATH = process.env.CHROME_PATH;
+initPath(DIST_DIR);
 
 export const CHROME_FLAGS = [
   ...(IS_MACOS ? [] : ["--headless"]),

@@ -6,6 +6,6 @@ export default async function() {
     console.log(argv);
     await parseVideo(argv);
   } else {
-    throw '请输入糖豆页面链接'
+    console.info('缺少指定视频链接')
   }
 }
