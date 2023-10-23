@@ -15,7 +15,7 @@ const createHttpServer = () => {
   /**
    * 静态文件
    */
-  http.use(express.static('public'))
+  http.use('/front', express.static('public'))
 
   http.use('/static/dist', express.static('dist'))
 

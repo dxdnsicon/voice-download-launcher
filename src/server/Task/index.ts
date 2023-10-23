@@ -20,7 +20,7 @@ const clearMap = () => {
 
 const forkChild = (data: TaskProps) => {
   const child = fork(
-    path.join(__dirname, 'task.js'),
+    path.join(__dirname, 'Task.js'),
     [],
     {
       execPath: process.env.NODE,  
@@ -44,6 +44,13 @@ const forkChild = (data: TaskProps) => {
 
 export default () => {
   const router = express.Router()
+
+  router.post('/all', async (req, res, next) => {
+    return res.json({
+      code: 0,
+      data: PROCESS_MAP
+    });
+  });
 
   router.post('/:id', async (req, res, next) => {
     const { id } = req.params;

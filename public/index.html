@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <title>转换工具</title>
+        <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport">
+        <meta content="telephone=no" name="format-detection">
+        <meta content="zh-cn" http-equiv="Content-Language">
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <meta content="mobile" name="applicable-device">
+        <script src="./zepto.js"></script>
+        <script>
+            !function(t, e, i) {
+                var n = "orientationchange"in t ? "orientationchange" : "resize"
+                  , a = e.documentElement;
+                if (a.style = "width:100vw",
+                a.style.width.match("vw"))
+                    return !0;
+                function h() {
+                    switch (i) {
+                    case "height":
+                        var e = Math.max(a.clientHeight, t.innerHeight) / 667 * 100 || 100;
+                        break;
+                    default:
+                        e = Math.max(a.clientWidth, t.innerWidth) / 375 * 100 || 100
+                    }
+                    e < 60 && (e = 60),
+                    e > 120 && (e = 120),
+                    a.style.fontSize = e + "px"
+                }
+                t.addEventListener(n, h, !1),
+                h()
+            }(window, document, "width");
+        </script>
+        <style>
+            * { padding: 0; margin: 0; box-sizing: border-box;}
+            body { padding: 10px}
+            .main_table {border:1px solid #999999; border-collapse:collapse; width: 100%}
+            .main_table td, .main_table th {border:1px solid #999999; padding: 10px 15px; font-size: 12px;} 
+            .main_textarea { margin-top: 50px; margin-bottom: 30px; width:80%; height: 50px}
+            .main_btn { position: absolute; top: 60px; height: 50px; width: 20%; background-color: #1885F5; color: #FFF; border: 1px solid #1885F5} 
+        </style>
+    </head>
+    <body class="page_downright">
+        <section id="js_app">
+            <textarea id="main_input" class="main_textarea">https://www.tangdoufdn.com/h5/play?vid=20000004955367&utm_campaign=client_share&utm_source=tangdou_android&utm_medium=wx_chat&utm_type=0&share_uid=8602602</textarea>
+            <button id="main_btn" class="main_btn" onclick="start()">启动</button>
+            <table class="main_table">
+                <tr>
+                    <th>任务id</th>
+                    <th>状态</th>
+                    <th>时间</th>
+                    <th>操作</th>
+                </tr>
+            </table>
+
+            
+        </section>
+        <script>
+            const stateMap = ['初始化', '访问中', '下载中', '转换中', '成功']
+            function formateTime(e, t) {
+                void 0 === t && (t = "yyyy-MM-dd hh:mm:ss"),
+                isNaN(e / 1) || (e = +e);
+                var r = new Date(e)
+                , o = {
+                    "M+": r.getMonth() + 1,
+                    "d+": r.getDate(),
+                    "h+": r.getHours(),
+                    "m+": r.getMinutes(),
+                    "s+": r.getSeconds(),
+                    "q+": Math.floor((r.getMonth() + 3) / 3),
+                    S: r.getMilliseconds()
+                };
+                for (var n in /(y+)/.test(t) && (t = t.replace(RegExp.$1, ("" + r.getFullYear()).substr(4 - RegExp.$1.length))),
+                o)
+                    new RegExp("(" + n + ")").test(t) && (t = t.replace(RegExp.$1, 1 === RegExp.$1.length ? o[n] : ("00" + o[n]).substr(("" + o[n]).length)));
+                return t
+            }
+            function renderTabl(obj) {
+                var prefix = '<tr><th>任务id</th><th>状态</th><th>时间</th><th>操作</th></tr>'
+                var table = $('.main_table');
+                var str = prefix;
+                for (var i in obj) {
+                    var id = i,info = obj[i];
+                    var lastInfo = info[info.length-1];
+                    var firstInfo = info[0];
+                    str += `<tr><td>${id}</td><td>${stateMap[lastInfo.name]}</td><td>${formateTime(firstInfo.time)}</td><td>操作</td></tr>`
+                }
+                table.html(str);
+                return str;
+            }
+
+            function initData() {
+                $.ajax({
+                    url: '/api/v1/task/all',
+                    type: 'POST',
+                    dataTyle: 'json',
+                    success(res){
+                        if (res.code === 0) {
+                            renderTabl(res.data)
+                        }
+                    }
+                })
+            }
+
+            function start() {
+                var val =  $('#main_input').val();
+                if (!val) return alert('请输入视频地址链接')
+                if (val.indexOf('tangdou') === -1) return alert('输入的视频链接不对')
+                $.ajax({
+                    url: '/api/v1/task',
+                    type: 'POST',
+                    data: {
+                        link: val
+                    },
+                    dataTyle: 'json',
+                    success(){
+                        initData();
+                        alert('发送成功')
+                    }
+                })
+            }
+
+            initData()
+        </script>
+    </body>
+</html>
