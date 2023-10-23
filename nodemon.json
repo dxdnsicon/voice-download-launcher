@@ -1,0 +1,9 @@
+{
+  "verbose": true,
+  "ignore": ["node_modules/", "dist/", "public/"],
+  "execMap": {
+    "js": "node --harmony"
+  },
+  "watch": ["*.js"],
+  "ext": "js"
+}

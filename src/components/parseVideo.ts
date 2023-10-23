@@ -4,12 +4,14 @@ import { initBrowser, closeBrowser } from './browser';
 import { DIST_DIR } from '../config';
 import Installer from '@ffmpeg-installer/ffmpeg';
 import ffmpeg from 'fluent-ffmpeg';
+import { ProcessRsp, ProcessState } from '../typings/task';
 const ffmpegPath = Installer.path;
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 const getVideoUrl = async (pageUrl): Promise<{
   url: string;
   name: string;
+  headers: Record<string, string>;
 }> => {
   const url = pageUrl || 'https://share.tangdouadn.com/h5/play?vid=20000002722749&utm_campaign=client_share&utm_source=tangdou_android&utm_medium=wx_chat&utm_type=0&share_uid=8602602'
   let over = false;
@@ -29,6 +31,13 @@ const getVideoUrl = async (pageUrl): Promise<{
         reject()
       }
     },15000)
+    let mp4Headers = null;
+    page.on('request', async (req) => {
+      const assets = req.url();
+      if (assets.indexOf('.mp4?') > -1) {
+        mp4Headers = req.headers();
+      }
+    })
     page.on('response', async (res) => {
       const assets = res.url();
       if (assets.indexOf('.mp4?') > -1) {
@@ -39,22 +48,33 @@ const getVideoUrl = async (pageUrl): Promise<{
     await page.goto(url);
     await page.waitForTimeout(3000);
     title = await page.evaluate(() => document.querySelector("#app > div > div:nth-child(2) > div.user-bar > div.info > p.title").textContent);
+    console.log('mp4Headers', mp4Headers)
     await close();
     resolve({
       url: videoUrl,
-      name: title
+      name: title,
+      headers: mp4Headers
     })
   })
 }
 
-const downLoadHandle = (url: string, fileName: string): Promise<string> => {
+const makeHeaders = (headers: Record<string, string>): string => {
+  let str = ''
+  for (let i in headers) {
+    str += `--header='${i}:${headers[i]}' `
+  }
+  return str;
+}
+
+const downLoadHandle = (url: string, fileName: string, headers: Record<string, string>): Promise<string> => {
   return new Promise((resolve, reject) => {
     const filePath = `${DIST_DIR}${fileName}.mp4`
     const cmd = `
-    wget '${url}' -O '${filePath}' --debug --header="host: aqiniushare.tangdou.com" --header="sec-fetch-site:cross-site" --header="sec-fetch-mode:no-cors" --header="sec-fetch-dest:video" --header="referer:https://www.tangdoucdn.com/" --header="accept-language:zh-CN,zh;q=0.9" --header="range:bytes=851108-69482961" --header="if-range:lkGfxRPMOxwEKiPhfFVlVW3m_zb7"
+    wget '${url}' -O '${filePath}' --debug ${makeHeaders(headers)}
     `
     console.log('cmd', cmd)
     exec(cmd, (err, stdout, stderr) => {
+      console.log('stdout', stdout, stderr)
       if (!!err) {
         console.log('download err', err)
         reject(err);
@@ -82,14 +102,38 @@ const mp4Tomp3 = (filePath: string, fileName: string) => {
   })
 }
 
-export default async function (pageUrl: string) {
+export default async function (pageUrl: string, cb?: (process: ProcessRsp) => void) {
   try {
-    const { url, name } = await getVideoUrl(pageUrl);
+    cb?.({
+      name: ProcessState.OPENWEB,
+      data: { url: pageUrl }
+    })
+    const { url, name, headers } = await getVideoUrl(pageUrl);
+    cb?.({
+      name: ProcessState.DOWNLOAD,
+      data: { url, name, headers }
+    })
     console.log('davideoUrlta', url, name)
-    const filePath = await downLoadHandle(url, name);
+    const filePath = await downLoadHandle(url, name, headers);
+    cb?.({
+      name: ProcessState.FORMAT,
+      data: {
+        filePath
+      }
+    })
     const mp3File = await mp4Tomp3(filePath, name);
+    cb?.({
+      name: ProcessState.END,
+      data: {
+        mp3File,
+        filePath
+      }
+    })
     console.log('转换完成', mp3File)
-    process.exit(0)
+    return {
+      mp3File,
+      filePath
+    }
   } catch(e) {
     console.error(e);
   }

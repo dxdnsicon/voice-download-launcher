@@ -1,1 +1,2 @@
-export default function (...args: any[]): void;
+declare function log(...args: any[]): void;
+export default log;
