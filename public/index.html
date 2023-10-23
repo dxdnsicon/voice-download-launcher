@@ -37,7 +37,8 @@
             * { padding: 0; margin: 0; box-sizing: border-box;}
             body { padding: 10px}
             .main_table {border:1px solid #999999; border-collapse:collapse; width: 100%}
-            .main_table td, .main_table th {border:1px solid #999999; padding: 10px 15px; font-size: 12px;} 
+            .main_table td, .main_table th {border:1px solid #999999; padding: 10px 5px; font-size: 10px;} 
+            .main_table td a { text-decoration: none }
             .main_textarea { margin-top: 50px; margin-bottom: 30px; width:80%; height: 50px}
             .main_btn { position: absolute; top: 60px; height: 50px; width: 20%; background-color: #1885F5; color: #FFF; border: 1px solid #1885F5} 
         </style>
@@ -48,7 +49,7 @@
             <button id="main_btn" class="main_btn" onclick="start()">启动</button>
             <table class="main_table">
                 <tr>
-                    <th>任务id</th>
+                    <th style="width: 50px">任务id</th>
                     <th>状态</th>
                     <th>时间</th>
                     <th>操作</th>
@@ -58,7 +59,22 @@
             
         </section>
         <script>
-            const stateMap = ['初始化', '访问中', '下载中', '转换中', '成功']
+            const stateMap = [{
+                name: '初始化',
+                color: '#999999'
+            }, {
+                name: '访问中',
+                color: 'red'
+            }, {
+                name: '下载中',
+                color: '#1885f5'
+            }, {
+                name: '转换中',
+                color: '#1885f5'
+            }, {
+                name: '成功',
+                color: 'green'
+            }]
             function formateTime(e, t) {
                 void 0 === t && (t = "yyyy-MM-dd hh:mm:ss"),
                 isNaN(e / 1) || (e = +e);
@@ -78,19 +94,29 @@
                 return t
             }
             function renderTabl(obj) {
-                var prefix = '<tr><th>任务id</th><th>状态</th><th>时间</th><th>操作</th></tr>'
+                var prefix = '<tr><th style="width: 100px">任务id</th><th>状态</th><th>发起时间</th><th>操作</th></tr>'
                 var table = $('.main_table');
                 var str = prefix;
                 for (var i in obj) {
                     var id = i,info = obj[i];
                     var lastInfo = info[info.length-1];
                     var firstInfo = info[0];
-                    str += `<tr><td>${id}</td><td>${stateMap[lastInfo.name]}</td><td>${formateTime(firstInfo.time)}</td><td>操作</td></tr>`
+                    str += `<tr><td>${id}</td><td style="color: ${stateMap[lastInfo.name].color}">${stateMap[lastInfo.name].name}</td><td>${formateTime(firstInfo.time)}</td><td><a href="javascript:;" data-id="${i}">${lastInfo.name === 4 ? '下载': '未完成'}</a></td></tr>`
                 }
                 table.html(str);
                 return str;
             }
 
+            function downlowd(url, name) {
+                var a = document.createElement('a');
+                var filename = name;
+                a.href = url;
+                a.download = filename;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+
+            var tableData = {};
             function initData() {
                 $.ajax({
                     url: '/api/v1/task/all',
@@ -98,9 +124,25 @@
                     dataTyle: 'json',
                     success(res){
                         if (res.code === 0) {
+                            tableData = res.data;
                             renderTabl(res.data)
                         }
                     }
+                })
+
+                $('.main_table').on('click', 'a', function(e) {
+                    var id = e.target.getAttribute('data-id');
+                    var info = tableData[id];
+                    var data = null;
+                    for (var i in info) {
+                        if (info[i].name === 4) {
+                            data = info[i]
+                        }
+                    }
+                    if (!data) {
+                        return alert('暂不可下载')
+                    }
+                    downlowd(data.data.filePath, data.data.fileName)
                 })
             }
 

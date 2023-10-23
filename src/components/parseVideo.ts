@@ -70,7 +70,7 @@ const downLoadHandle = (url: string, fileName: string, headers: Record<string, s
   return new Promise((resolve, reject) => {
     const filePath = `${DIST_DIR}${fileName}.mp4`
     const cmd = `
-    wget '${url}' -O '${filePath}' --debug ${makeHeaders(headers)}
+    wget '${url}' -O '${filePath}' --no-check-certificate --debug ${makeHeaders(headers)}
     `
     console.log('cmd', cmd)
     exec(cmd, (err, stdout, stderr) => {
@@ -126,13 +126,15 @@ export default async function (pageUrl: string, cb?: (process: ProcessRsp) => vo
       name: ProcessState.END,
       data: {
         mp3File,
-        filePath
+        filePath,
+        fileName: name
       }
     })
     console.log('转换完成', mp3File)
     return {
       mp3File,
-      filePath
+      filePath,
+      fileName: name
     }
   } catch(e) {
     console.error(e);
