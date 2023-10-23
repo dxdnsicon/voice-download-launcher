@@ -70,7 +70,7 @@ const downLoadHandle = (url: string, fileName: string, headers: Record<string, s
   return new Promise((resolve, reject) => {
     const filePath = `${DIST_DIR}${fileName}.mp4`
     const cmd = `
-    wget '${url}' -O '${filePath}' --no-check-certificate --debug ${makeHeaders(headers)}
+    wget '${url}' -O '${filePath}' --no-check-certificate --debug --header='sec-ch-ua:' --header='referer:https://www.tangdoufdn.com/'  
     `
     console.log('cmd', cmd)
     exec(cmd, (err, stdout, stderr) => {
@@ -102,6 +102,10 @@ const mp4Tomp3 = (filePath: string, fileName: string) => {
   })
 }
 
+const cdnUrl = (name: string) => {
+  return `/static/dist/${name}.mp3`
+}
+
 export default async function (pageUrl: string, cb?: (process: ProcessRsp) => void) {
   try {
     cb?.({
@@ -118,22 +122,21 @@ export default async function (pageUrl: string, cb?: (process: ProcessRsp) => vo
     cb?.({
       name: ProcessState.FORMAT,
       data: {
-        filePath
+        filePath: cdnUrl(name),
+        fileName: name
       }
     })
     const mp3File = await mp4Tomp3(filePath, name);
     cb?.({
       name: ProcessState.END,
       data: {
-        mp3File,
-        filePath,
-        fileName: name
+        filePath: cdnUrl(name),
+        fileName: `${name}.mp3`
       }
     })
     console.log('转换完成', mp3File)
     return {
-      mp3File,
-      filePath,
+      filePath: cdnUrl(name),
       fileName: name
     }
   } catch(e) {
