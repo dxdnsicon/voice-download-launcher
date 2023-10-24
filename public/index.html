@@ -171,15 +171,22 @@
                     },
                     dataTyle: 'json',
                     success(){
-                        timer = setInterval(() => {
-                            initData();
-                        }, 2000)
+                        if (!timer) {
+                            timer = setInterval(() => {
+                                initData();
+                            }, 2000)
+                        }
                         alert('发送成功')
                     }
                 })
             }
 
             initData()
+            timer = setInterval(() => {
+                initData();
+            }, 3000)
+
+            
         </script>
     </body>
 </html>
