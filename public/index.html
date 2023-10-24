@@ -59,6 +59,7 @@
             
         </section>
         <script>
+            var timer = null;
             const stateMap = [{
                 name: '初始化',
                 color: '#999999'
@@ -97,11 +98,19 @@
                 var prefix = '<tr><th style="width: 100px">任务id</th><th>状态</th><th>发起时间</th><th>操作</th></tr>'
                 var table = $('.main_table');
                 var str = prefix;
+                var isOver = true;
                 for (var i in obj) {
                     var id = i,info = obj[i];
                     var lastInfo = info[info.length-1];
                     var firstInfo = info[0];
+                    if (lastInfo.name < 4) {
+                        isOver = false;
+                    }
                     str += `<tr><td>${id}</td><td style="color: ${stateMap[lastInfo.name].color}">${stateMap[lastInfo.name].name}</td><td>${formateTime(firstInfo.time)}</td><td><a href="javascript:;" data-id="${i}">${lastInfo.name === 4 ? '下载': '未完成'}</a></td></tr>`
+                }
+                if (isOver) {
+                    clearInterval(timer);
+                    timer = null;
                 }
                 table.html(str);
                 return str;
@@ -158,7 +167,9 @@
                     },
                     dataTyle: 'json',
                     success(){
-                        initData();
+                        timer = setInterval(() => {
+                            initData();
+                        }, 2000)
                         alert('发送成功')
                     }
                 })
