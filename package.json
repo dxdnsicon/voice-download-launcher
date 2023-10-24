@@ -9,7 +9,7 @@
     "start:dev": "NODE_ENV=dev nodemon es/server/index.js",
     "start:server": "NODE_ENV=production node es/server/index.js",
     "debug": "node es/debug.js",
-    "pm2": "pm2"
+    "pm2": "pm2 start pm2.json"
   },
   "repository": {
     "type": "git",
