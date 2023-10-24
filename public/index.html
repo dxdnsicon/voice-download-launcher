@@ -45,7 +45,8 @@
     </head>
     <body class="page_downright">
         <section id="js_app">
-            <textarea id="main_input" class="main_textarea">https://www.tangdoufdn.com/h5/play?vid=20000004955367&utm_campaign=client_share&utm_source=tangdou_android&utm_medium=wx_chat&utm_type=0&share_uid=8602602</textarea>
+            <!-- https://www.tangdoufdn.com/h5/play?vid=20000004955367&utm_campaign=client_share&utm_source=tangdou_android&utm_medium=wx_chat&utm_type=0&share_uid=8602602 -->
+            <textarea id="main_input" class="main_textarea"></textarea>
             <button id="main_btn" class="main_btn" onclick="start()">启动</button>
             <table class="main_table">
                 <tr>
@@ -75,6 +76,9 @@
             }, {
                 name: '成功',
                 color: 'green'
+            }, {
+                name: '发生错误',
+                color: 'red'
             }]
             function formateTime(e, t) {
                 void 0 === t && (t = "yyyy-MM-dd hh:mm:ss"),

@@ -141,5 +141,11 @@ export default async function (pageUrl: string, cb?: (process: ProcessRsp) => vo
     }
   } catch(e) {
     console.error(e);
+    cb?.({
+      name: ProcessState.ERROR,
+      data: {
+        e: e,
+      }
+    })
   }
 }

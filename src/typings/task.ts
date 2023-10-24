@@ -8,7 +8,8 @@ export enum ProcessState {
   OPENWEB,
   DOWNLOAD,
   FORMAT,
-  END
+  END,
+  ERROR
 }
 
 export type ProcessRsp = {
