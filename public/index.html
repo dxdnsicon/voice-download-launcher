@@ -103,8 +103,8 @@
                     var firstInfo = info[0];
                     var name = ''
                     for (var k in info) {
-                        if (info[i].name === 2) {
-                            name = info[i].data.name
+                        if (info[k] && info[k].name === 2) {
+                            name = info[k].data && info[k].data.name
                         }
                     }
                     if (lastInfo.name < 4) {
