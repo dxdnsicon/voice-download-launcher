@@ -49,12 +49,6 @@
             <textarea id="main_input" class="main_textarea"></textarea>
             <button id="main_btn" class="main_btn" onclick="start()">启动</button>
             <table class="main_table">
-                <tr>
-                    <th style="width: 50px">任务id</th>
-                    <th>状态</th>
-                    <th>时间</th>
-                    <th>操作</th>
-                </tr>
             </table>
 
             
@@ -99,7 +93,7 @@
                 return t
             }
             function renderTabl(obj) {
-                var prefix = '<tr><th style="width: 100px">任务id</th><th>状态</th><th>发起时间</th><th>操作</th></tr>'
+                var prefix = '<tr><th style="width: 100px">任务id</th><th>名称</th><th style="width: 70px">发起时间</th><th>状态</th><th>操作</th></tr>'
                 var table = $('.main_table');
                 var str = prefix;
                 var isOver = true;
@@ -107,10 +101,16 @@
                     var id = i,info = obj[i];
                     var lastInfo = info[info.length-1];
                     var firstInfo = info[0];
+                    var name = ''
+                    for (var k in info) {
+                        if (info[i].name === 2) {
+                            name = info[i].data.name
+                        }
+                    }
                     if (lastInfo.name < 4) {
                         isOver = false;
                     }
-                    str += `<tr><td>${id}</td><td style="color: ${stateMap[lastInfo.name].color}">${stateMap[lastInfo.name].name}</td><td>${formateTime(firstInfo.time)}</td><td><a href="javascript:;" data-id="${i}">${lastInfo.name === 4 ? '下载': '未完成'}</a></td></tr>`
+                    str += `<tr><td>${id}</td><td>${name}</td><td>${formateTime(firstInfo.time)}</td><td style="color: ${stateMap[lastInfo.name].color}">${stateMap[lastInfo.name].name}</td><td><a href="javascript:;" data-id="${i}">${lastInfo.name === 4 ? '下载': '未完成'}</a></td></tr>`
                 }
                 if (isOver) {
                     clearInterval(timer);
