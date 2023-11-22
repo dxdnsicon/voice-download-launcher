@@ -113,11 +113,12 @@
                 var str = prefix;
                 var isOver = true;
                 let list = Object.values(obj);
+                let keys = Object.keys(obj);
                 list = list.sort((x, y) => {
                     return y[y.length - 1].time - x[x.length - 1].time
                 })
                 for (var i in list) {
-                    var id = i,info = list[i];
+                    var id = keys[i],info = list[i];
                     var lastInfo = info[info.length-1];
                     var firstInfo = info[0];
                     var name = ''
@@ -129,7 +130,7 @@
                     if (lastInfo.name < 4) {
                         isOver = false;
                     }
-                    str += `<tr><td>${id}</td><td>${name}</td><td>${formateTime(firstInfo.time)}</td><td style="color: ${stateMap[lastInfo.name].color}">${stateMap[lastInfo.name].name}</td><td><a href="javascript:;" data-id="${i}">${lastInfo.name === 4 ? '下载': '未完成'}</a></td></tr>`
+                    str += `<tr><td>${id}</td><td>${name}</td><td>${formateTime(firstInfo.time)}</td><td style="color: ${stateMap[lastInfo.name].color}">${stateMap[lastInfo.name].name}</td><td><a href="javascript:;" data-id="${id}">${lastInfo.name === 4 ? '下载': '未完成'}</a></td></tr>`
                 }
                 if (isOver) {
                     clearInterval(timer);
