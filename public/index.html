@@ -92,13 +92,32 @@
                     new RegExp("(" + n + ")").test(t) && (t = t.replace(RegExp.$1, 1 === RegExp.$1.length ? o[n] : ("00" + o[n]).substr(("" + o[n]).length)));
                 return t
             }
+            if (!Object.values) {
+                Object.values = function(obj) {
+                    if (obj !== Object(obj)) {
+                     throw new TypeError('Object.values called on a non-object');
+                    }
+                    let val = [],
+                    key;
+                    for (key in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                        val.push(obj[key]);
+                    }
+                    }
+                    return val;
+                };
+            }
             function renderTabl(obj) {
                 var prefix = '<tr><th style="width: 100px">任务id</th><th>名称</th><th style="width: 70px">发起时间</th><th>状态</th><th>操作</th></tr>'
                 var table = $('.main_table');
                 var str = prefix;
                 var isOver = true;
-                for (var i in obj) {
-                    var id = i,info = obj[i];
+                let list = Object.values(obj);
+                list = list.sort((x, y) => {
+                    return y[y.length - 1].time - x[x.length - 1].time
+                })
+                for (var i in list) {
+                    var id = i,info = list[i];
                     var lastInfo = info[info.length-1];
                     var firstInfo = info[0];
                     var name = ''
