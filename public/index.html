@@ -112,13 +112,9 @@
                 var table = $('.main_table');
                 var str = prefix;
                 var isOver = true;
-                let list = Object.values(obj);
-                let keys = Object.keys(obj);
-                list = list.sort((x, y) => {
-                    return y[y.length - 1].time - x[x.length - 1].time
-                })
+                let list = obj;
                 for (var i in list) {
-                    var id = keys[i],info = list[i];
+                    var id = list[i].Ftask_id,info = list[i].Fjson;
                     var lastInfo = info[info.length-1];
                     var firstInfo = info[0];
                     var name = ''
@@ -165,8 +161,9 @@
 
                 $('.main_table').on('click', 'a', function(e) {
                     var id = e.target.getAttribute('data-id');
-                    var info = tableData[id];
+                    var info = tableData.filter(x => x.Ftask_id === id)[0].Fjson;
                     var data = null;
+                    console.log(tableData)
                     for (var i in info) {
                         if (info[i].name === 4) {
                             data = info[i]

@@ -4,10 +4,12 @@ import createError from 'http-errors'
 import { API_PREFIX, SERVER_PORT } from '../typings/constant';
 import logger from '../utils/log';
 import getTask from './Task/index';
+import { init } from './entity'
 
 const pkgJson = require('../../package.json');
 
 const createHttpServer = () => {
+  init();
   const http = express();
   http.use(cors({ origin: true }))  // See https://expressjs.com/en/resources/middleware/cors.html#configuration-options
   http.use(express.json());
@@ -73,3 +75,11 @@ const createHttpServer = () => {
 }
 
 const httpServer = createHttpServer()
+
+process.on('unhandledRejection', (reason: any) => {
+  console.error('UnhandledRejection', reason?.message, reason?.stack);
+});
+
+process.on('uncaughtException', (reason) => {
+  console.error('uncaughtException', reason?.message, reason?.stack);
+});

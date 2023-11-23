@@ -5,7 +5,6 @@ import { exec } from 'child_process';
 export const IS_MACOS = platform() === 'darwin';
 const env = path.resolve(__dirname, '../../.env');
 require('dotenv').config({ path: env })
-
 export const CHROME_PATH = process.env.CHROME_PATH;
 
 export async function getChromeInstallPath(): Promise<string> {
@@ -64,3 +63,11 @@ export const CHROME_FLAGS = [
   // `--remote-debugging-port=0`,
   // ...(USE_PROXY ? [`--proxy-server=${PROXY_STR}`] : [])
 ]
+
+const isDev = !!IS_MACOS;
+
+export const DB_HOST = process.env.DB_HOST;
+export const DB_PORT = process.env.DB_PORT;
+
+export const DB_USER = process.env.DB_USER
+export const DB_PASSWORD= process.env.DB_PASSWORD
